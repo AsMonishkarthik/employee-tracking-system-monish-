@@ -38,6 +38,11 @@
           {{ form.confirm_password }}
           {% if form.non_field_errors %}<p class="form-error">{{ form.non_field_errors.0 }}</p>{% endif %}
         </div>
+        <div class="form-group">
+          <label class="form-label">🔑 Secret Setup Key</label>
+          {{ form.secret_key }}
+          {% if form.secret_key.errors %}<p class="form-error">{{ form.secret_key.errors.0 }}</p>{% endif %}
+        </div>
         <button type="submit" class="btn btn-primary btn-lg">Create Admin Account</button>
       </form>
     </div>
