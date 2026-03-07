@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Details</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* ===========================
+           GENERAL RESET & BASE
+        =========================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        /* ===========================
+           MAIN CARD
+        =========================== */
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 680px;
+            overflow: hidden;
+        }
+
+        /* ===========================
+           CARD TOP HEADER
+        =========================== */
+        .card-header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        /* Profile photo */
+        .card-header img {
+            width: 130px;
+            height: 130px;
+            /* border-radius: 50%; */
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.8rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .card-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 0.2rem;
+        }
+
+        /* ===========================
+           INFO SECTION
+        =========================== */
+        .card-body {
+            padding: 1.8rem 2rem;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #1a73e8;
+            margin-bottom: 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid #e8f0fe;
+        }
+
+        /* Each info row */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f4f8;
+            gap: 1rem;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #6b7280;
+            min-width: 140px;
+        }
+
+        .info-value {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: #111827;
+            text-align: right;
+        }
+
+        /* Special style for salary */
+        .info-value.salary {
+            color: #1a73e8;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* ===========================
+           FOOTER BUTTONS
+        =========================== */
+        .card-footer {
+            background: #f8faff;
+            border-top: 1px solid #e8f0fe;
+            padding: 1.2rem 2rem;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.55rem 1.3rem;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .btn-back {
+            background: #f0f4f8;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-edit {
+            background: #1a73e8;
+            color: #ffffff;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+            color: #ffffff;
+        }
+
+        /* Delete form sits inline */
+        .delete-form {
+            display: inline;
+        }
+
+        /* ===========================
+           RESPONSIVE — MOBILE
+        =========================== */
+        @media (max-width: 480px) {
+            .info-row {
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+
+            .info-value {
+                text-align: left;
+            }
+
+            .card-footer {
+                justify-content: stretch;
+            }
+
+            .btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Main Card -->
+    <div class="card">
+
+        <!-- Header with photo + name -->
+        <div class="card-header">
+
+            {% if employee.passport_photo %}
+            <img src="{{ employee.passport_photo.url }}" alt="Employee Photo">
+            {% else %}
+            <img src="https://placehold.co/100x100/ffffff/1a73e8?text=Photo" alt="No Photo">
+            {% endif %}
+
+            <h2>{{ employee.name|default:"Employee Name" }}</h2>
+            <p>{{ employee.role|default:"Role not specified" }}</p>
+
+        </div>
+
+        <!-- Info rows -->
+        <div class="card-body">
+
+            <p class="section-title">Employee Information</p>
+
+            <div class="info-row">
+                <span class="info-label">📍 Address</span>
+                <span class="info-value">{{ employee.address|default:"—" }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">💰 Current Salary</span>
+                <span class="info-value salary">₹ {{ employee.current_salary|default:"—" }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">📁 Previous Project</span>
+                <span class="info-value">{{ employee.previous_project|default:"—" }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">🧠 Project Experience</span>
+                <span class="info-value">{{ employee.previous_project_experience|default:"—" }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">🗓️ Created At</span>
+                <span class="info-value">{{ employee.created_at|default:"—" }}</span>
+            </div>
+
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card-footer">
+
+            <a href="{% url 'dashboard' %}" class="btn btn-back">← Back</a>
+
+            <a href="{% url 'edit_employee' employee.pk %}" class="btn btn-edit">Edit</a>
+
+            <form class="delete-form" method="POST" action="{% url 'delete_employee' employee.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-delete"
+                    onclick="return confirm('Are you sure you want to delete this employee?');">
+                    Delete
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

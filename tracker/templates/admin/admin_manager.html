@@ -1,0 +1,55 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+
+<div class="container">
+    <h2>👨‍💼 Managers Management</h2>
+
+    <!-- Search -->
+    <form method="get" style="margin-bottom:20px;">
+        <input type="text" name="q" placeholder="Search by username or email..."
+               value="{{ search }}">
+        <button type="submit" class="btn">Search</button>
+    </form>
+
+    <p><strong>Total Managers:</strong> {{ managers|length }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Employees</th>
+                <th>Date Joined</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for manager in managers %}
+            <tr>
+                <td>{{ manager.id }}</td>
+                <td>{{ manager.username }}</td>
+                <td>{{ manager.email }}</td>
+                <td>{{ manager.emp_count }}</td>
+                <td>{{ manager.date_joined|date:"d M Y" }}</td>
+                <td>
+                    <a href="{% url 'admin_manager_detail' manager.id %}" class="btn">
+                        View
+                    </a>
+                    <a href="{% url 'admin_delete_manager' manager.id %}" class="btn btn-danger">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    No managers found.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Dashboard — Admin Panel{% endblock %}
+{% block topbar_title %}Dashboard{% endblock %}
+{% block nav_dash %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="page-title">Overview</div>
+    <div class="page-sub">Welcome back, {{ admin_username }}</div>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat-box">
+    <div class="stat-icon">👔</div>
+    <div class="stat-num amber">{{ total_managers }}</div>
+    <div class="stat-lbl">Total Managers</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-icon">👥</div>
+    <div class="stat-num green">{{ total_employees }}</div>
+    <div class="stat-lbl">Total Employees</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-icon">🔐</div>
+    <div class="stat-num blue">{{ total_admins }}</div>
+    <div class="stat-lbl">Admin Accounts</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;flex-wrap:wrap;">
+
+  <!-- Managers Table -->
+  <div class="card" style="overflow:hidden;padding:0;">
+    <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-family:var(--font-head);font-weight:700;">Managers</span>
+      <a href="{% url 'admin_managers_list' %}" style="font-size:0.78rem;color:var(--accent);text-decoration:none;">View all →</a>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Manager</th><th>Staff</th><th>Joined</th></tr>
+      </thead>
+      <tbody>
+        {% for m in managers|slice:":6" %}
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+              <div class="avatar">{{ m.username|first|upper }}</div>
+              <div>
+                <div style="font-weight:500;">{{ m.username }}</div>
+                <div style="font-size:0.72rem;color:var(--muted);">{{ m.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="tag tag-green">{{ m.emp_count }}</span></td>
+          <td style="color:var(--muted);">{{ m.date_joined|date:"M d, Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="empty">No managers yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recent Employees -->
+  <div class="card" style="overflow:hidden;padding:0;">
+    <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-family:var(--font-head);font-weight:700;">Recent Employees</span>
+      <a href="{% url 'admin_employees_list' %}" style="font-size:0.78rem;color:var(--accent);text-decoration:none;">View all →</a>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Employee</th><th>Role</th><th>Manager</th></tr>
+      </thead>
+      <tbody>
+        {% for emp in recent_employees %}
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+              <div class="avatar">
+                {% if emp.passport_photo %}<img src="{{ emp.passport_photo.url }}"/>
+                {% else %}{{ emp.name|first|upper }}{% endif %}
+              </div>
+              <span style="font-weight:500;">{{ emp.name }}</span>
+            </div>
+          </td>
+          <td><span class="tag tag-amber">{{ emp.role }}</span></td>
+          <td style="color:var(--muted);">{{ emp.manager.username }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="empty">No employees yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Managers — Admin Panel{% endblock %}
+{% block topbar_title %}Managers{% endblock %}
+{% block nav_mgr %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="page-title">All Managers</div>
+    <div class="page-sub">{{ managers|length }} manager account(s)</div>
+  </div>
+</div>
+
+<form method="get" class="search-row">
+  <input type="text" name="q" class="form-input" placeholder="Search by username or email…" value="{{ search }}"/>
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if search %}<a href="{% url 'admin_managers_list' %}" class="btn btn-secondary">Clear</a>{% endif %}
+</form>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Managers</th>
+        <th>Email</th>
+        <th>Staff Count</th>
+        <th>Date Joined</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in managers %}
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.7rem;">
+            <div class="avatar">{{ m.username|first|upper }}</div>
+            <span style="font-weight:600;">{{ m.username }}</span>
+          </div>
+        </td>
+        <td style="color:var(--muted);">{{ m.email|default:"—" }}</td>
+        <td><span class="tag tag-green">{{ m.emp_count }} employees</span></td>
+        <td style="color:var(--muted);">{{ m.date_joined|date:"M d, Y" }}</td>
+        <td>
+          <div style="display:flex;gap:0.4rem;">
+            <a href="{% url 'admin_delete_manager' m.pk %}" class="btn btn-sm btn-danger">Delete</a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">
+        <div class="empty"><div class="empty-icon">👔</div>No managers found.</div>
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

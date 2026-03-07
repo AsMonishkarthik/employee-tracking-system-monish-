@@ -1,0 +1,27 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Confirm Delete — Admin Panel{% endblock %}
+{% block topbar_title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div style="max-width:480px;margin:3rem auto;">
+  <div class="card" style="text-align:center;padding:3rem 2rem;">
+    <div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>
+    <h2 style="font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;">
+      Delete {{ object_type }}?
+    </h2>
+    <p style="color:var(--muted);margin-bottom:2rem;">
+      You are about to permanently delete
+      <strong style="color:var(--text);">{{ object_name }}</strong>.
+      {% if object_type == 'Manager' %}
+        <br/><span style="color:var(--accent2);font-size:0.82rem;">⚠️ This will also delete ALL their employees.</span>
+      {% endif %}
+      <br/>This action cannot be undone.
+    </p>
+    <form method="post" style="display:flex;justify-content:center;gap:1rem;">
+      {% csrf_token %}
+      <a href="{% url cancel_url %}" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

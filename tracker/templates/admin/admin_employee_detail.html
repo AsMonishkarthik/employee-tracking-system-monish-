@@ -1,0 +1,72 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}{{ employee.name }} — Admin Panel{% endblock %}
+{% block topbar_title %}Employee Detail{% endblock %}
+{% block nav_emp %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="avatar" style="width:52px;height:52px;">
+      {% if employee.passport_photo %}<img src="{{ employee.passport_photo.url }}"/>
+      {% else %}{{ employee.name|first|upper }}{% endif %}
+    </div>
+    <div>
+      <div class="page-title">{{ employee.name }}</div>
+      <div class="page-sub">{{ employee.role }} · managed by {{ employee.manager.username }}</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:0.6rem;">
+    <a href="{% url 'admin_delete_employee' employee.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'admin_employees_list' %}" class="btn btn-secondary">← Back</a>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+  <div class="card">
+    <div style="font-family:var(--font-head);font-weight:700;margin-bottom:1.2rem;">Personal Info</div>
+    {% for label, value in forloop.parentloop|default_if_none:"" %}{% endfor %}
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Full Name</div>
+        <div style="margin-top:0.2rem;font-weight:500;">{{ employee.name }}</div>
+      </div>
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Role</div>
+        <div style="margin-top:0.2rem;"><span class="tag tag-amber">{{ employee.role }}</span></div>
+      </div>
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Current Salary</div>
+        <div style="margin-top:0.2rem;font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--green);">₹{{ employee.current_salary|floatformat:2 }}</div>
+      </div>
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Address</div>
+        <div style="margin-top:0.2rem;line-height:1.5;color:var(--text);">{{ employee.address }}</div>
+      </div>
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Manager</div>
+        <div style="margin-top:0.2rem;"><span class="tag tag-blue">{{ employee.manager.username }}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-family:var(--font-head);font-weight:700;margin-bottom:1.2rem;">Project Info</div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Previous Project</div>
+        <div style="margin-top:0.2rem;font-weight:500;">{{ employee.previous_project }}</div>
+      </div>
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Project Experience</div>
+        <div style="margin-top:0.2rem;line-height:1.7;color:var(--text);">{{ employee.previous_project_experience }}</div>
+      </div>
+      {% if employee.passport_photo %}
+      <div>
+        <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">Passport Photo</div>
+        <img src="{{ employee.passport_photo.url }}" style="margin-top:0.6rem;width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid var(--border);"/>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

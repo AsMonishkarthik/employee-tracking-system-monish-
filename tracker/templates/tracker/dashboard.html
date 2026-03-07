@@ -1,0 +1,41 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+
+<h2>Staff Dashboard</h2>
+
+<p class="text-right">
+    <a href="{% url 'add_employee' %}" class="btn">Add Employee</a>
+
+    <a href="https://wa.me/?text={{ request.build_absolute_uri|cut:request.get_full_path }}{% url 'add_employee' %}"
+        target="_blank" class="btn">
+        WhatsApp
+    </a>
+    <br><br>
+</p>
+
+
+
+
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for emp in employees %}
+    <tr>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.email }}</td>
+        <td>{{ emp.department }}</td>
+        <td>
+            <a href="{% url 'employee_detail' emp.pk %}">View</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Admins — Admin Panel{% endblock %}
+{% block topbar_title %}Admin Accounts{% endblock %}
+{% block nav_adm %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="page-title">Admin Accounts</div>
+    <div class="page-sub">{{ admins|length }} admin(s) registered</div>
+  </div>
+  <a href="{% url 'admin_register' %}" class="btn btn-primary">+ Add Admin</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Username</th><th>Email</th><th>Created</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for a in admins %}
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.7rem;">
+            <div class="avatar" style="background:rgba(245,158,11,0.15);color:var(--accent);">{{ a.username|first|upper }}</div>
+            <span style="font-weight:600;">{{ a.username }}</span>
+            {% if a.id == request.session.admin_id %}
+              <span class="tag tag-green">You</span>
+            {% endif %}
+          </div>
+        </td>
+        <td style="color:var(--muted);">{{ a.email }}</td>
+        <td style="color:var(--muted);">{{ a.created_at|date:"M d, Y" }}</td>
+        <td>
+          {% if a.id != request.session.admin_id %}
+            <a href="{% url 'admin_delete_admin' a.pk %}" class="btn btn-sm btn-danger">Delete</a>
+          {% else %}
+            <span style="font-size:0.78rem;color:var(--muted);">Current session</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">
+        <div class="empty"><div class="empty-icon">🔐</div>No admins found.</div>
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

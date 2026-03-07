@@ -1,0 +1,59 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Employees — Admin Panel{% endblock %}
+{% block topbar_title %}All Employees{% endblock %}
+{% block nav_emp %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="page-title">All Employees</div>
+    <div class="page-sub">{{ employees|length }} total record(s)</div>
+  </div>
+</div>
+
+<form method="get" class="search-row">
+  <input type="text" name="q" class="form-input" placeholder="Search name, role, project, manager…" value="{{ search }}"/>
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if search %}<a href="{% url 'admin_employees_list' %}" class="btn btn-secondary">Clear</a>{% endif %}
+</form>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Employee</th><th>Role</th><th>Manager</th><th>Salary</th><th>Prev Project</th><th>Added</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for emp in employees %}
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.7rem;">
+            <div class="avatar">
+              {% if emp.passport_photo %}<img src="{{ emp.passport_photo.url }}"/>
+              {% else %}{{ emp.name|first|upper }}{% endif %}
+            </div>
+            <span style="font-weight:600;">{{ emp.name }}</span>
+          </div>
+        </td>
+        <td><span class="tag tag-amber">{{ emp.role }}</span></td>
+        <td>
+          <span class="tag tag-blue">{{ emp.manager.username }}</span>
+        </td>
+        <td style="color:var(--green);">₹{{ emp.current_salary|floatformat:0 }}</td>
+        <td style="color:var(--muted);">{{ emp.previous_project }}</td>
+        <td style="color:var(--muted);">{{ emp.created_at|date:"M d, Y" }}</td>
+        <td>
+          <div style="display:flex;gap:0.4rem;">
+            <a href="{% url 'admin_employee_detail' emp.pk %}" class="btn btn-sm btn-secondary">View</a>
+            <a href="{% url 'admin_delete_employee' emp.pk %}" class="btn btn-sm btn-danger">Del</a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7">
+        <div class="empty"><div class="empty-icon">👥</div>No employees found.</div>
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
