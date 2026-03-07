@@ -1,34 +1,33 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Admin — EmpTrack{% endblock %}</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="icon" href="{% static 'images/admin_dashboard.png' %}">
     <link rel="stylesheet" href="{% static 'css/adminstyle.css' %}">
-   
     {% block extra_head %}{% endblock %}
 </head>
-
 <body>
 
-    {% if request.session.admin_logged_in %}
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-brand">Control<span>Panel</span></div>
+    <!-- Dark overlay (mobile) -->
+    <div id="overlay" onclick="closeSidebar()"></div>
 
+    <!-- Hamburger button -->
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+    {% if request.session.admin_logged_in %}
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">Control<span>Panel</span></div>
         <div style="padding:0.5rem 0;">
             <div class="sidebar-section">Overview</div>
             <a href="{% url 'admin_dashboard' %}" class="nav-link {% block nav_dash %}{% endblock %}">
                 <span class="icon">📊</span> Dashboard
             </a>
-
             <div class="sidebar-section">Management</div>
             <a href="{% url 'admin_managers_list' %}" class="nav-link {% block nav_mgr %}{% endblock %}">
                 <span class="icon">👔</span> Managers
@@ -36,13 +35,11 @@
             <a href="{% url 'admin_employees_list' %}" class="nav-link {% block nav_emp %}{% endblock %}">
                 <span class="icon">👥</span> Employees
             </a>
-
             <div class="sidebar-section">System</div>
             <a href="{% url 'admin_admins_list' %}" class="nav-link {% block nav_adm %}{% endblock %}">
                 <span class="icon">🔐</span> Admins
             </a>
         </div>
-
         <div class="sidebar-footer">
             <strong>{{ admin_username }}</strong>
             <a href="{% url 'admin_logout' %}">⏻ Logout</a>
@@ -57,22 +54,37 @@
                 <span class="badge">⚡ Admin Panel</span>
             </div>
         </div>
-
         <div class="page-body">
             {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
             {% endif %}
             {% block content %}{% endblock %}
         </div>
     </div>
 
     {% else %}
-    <!-- No sidebar for auth pages -->
-    {% block auth_content %}{% endblock %}
+        {% block auth_content %}{% endblock %}
     {% endif %}
 
-</body>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("overlay");
+            sidebar.classList.toggle("active");
+            overlay.classList.toggle("active");
+        }
 
+        function closeSidebar() {
+            document.getElementById("sidebar").classList.remove("active");
+            document.getElementById("overlay").classList.remove("active");
+        }
+
+        // Close sidebar on Escape key
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeSidebar();
+        });
+    </script>
+</body>
 </html>
