@@ -18,7 +18,7 @@ from .forms import (
 )
 
 # ── Secret key to create first admin (change this!) ───────────────────────────
-ADMIN_SECRET_KEY = "emptrack@admin2024"
+ADMIN_SECRET_KEY = "monishkarthik@admin2026"
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
