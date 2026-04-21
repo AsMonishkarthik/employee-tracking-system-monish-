@@ -79,11 +79,11 @@ import os
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'employee_db',
+        'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'monishkarthik@2003',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'PASSWORD': 'tfauziovjzyeJmLbRkOmCCFcqqEJaVFx',
+        'HOST': 'yamanote.proxy.rlwy.net',
+        'PORT': '44381',
     }
 }
 
